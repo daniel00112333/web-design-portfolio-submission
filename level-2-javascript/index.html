@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 2 - Live Crypto Tracker</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 40px 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    h1 { font-size: 28px; font-weight: 700; color: #38bdf8; }
+    .search-input { padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; width: 250px; outline: none; }
+    .crypto-table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
+    th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid #334155; }
+    th { background: #0f172a; color: #94a3b8; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+    .positive { color: #4ade80; font-weight: 600; }
+    .negative { color: #f87171; font-weight: 600; }
+    .refresh-btn { background: #0284c7; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .refresh-btn:hover { background: #0369a1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Crypto Market Tracker</h1>
+        <p style="color: #94a3b8; font-size: 14px;">Live API Integration & Dynamic DOM Manipulation</p>
+      </div>
+      <div>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search currency...">
+        <button id="refreshBtn" class="refresh-btn">Fetch Live Data</button>
+      </div>
+    </div>
+
+    <table class="crypto-table">
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Price (USD)</th>
+          <th>24h Change</th>
+          <th>Market Cap</th>
+        </tr>
+      </thead>
+      <tbody id="cryptoBody">
+        <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Click 'Fetch Live Data' or wait for auto-load...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const mockData = [
+      { name: "Bitcoin (BTC)", price: "$92,450.00", change: "+3.25%", positive: true, cap: "$1.82T" },
+      { name: "Ethereum (ETH)", price: "$3,420.50", change: "-1.12%", positive: false, cap: "$411.2B" },
+      { name: "Solana (SOL)", price: "$215.80", change: "+8.45%", positive: true, cap: "$101.5B" },
+      { name: "Cardano (ADA)", price: "$0.85", change: "+0.45%", positive: true, cap: "$30.1B" },
+      { name: "Ripple (XRP)", price: "$1.42", change: "-2.30%", positive: false, cap: "$81.0B" }
+    ];
+
+    const cryptoBody = document.getElementById('cryptoBody');
+    const searchInput = document.getElementById('searchInput');
+
+    function renderTable(data) {
+      cryptoBody.innerHTML = '';
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:600">${item.name}</td>
+          <td>${item.price}</td>
+          <td class="${item.positive ? 'positive' : 'negative'}">${item.change}</td>
+          <td style="color:#94a3b8">${item.cap}</td>
+        `;
+        cryptoBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      cryptoBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#38bdf8;">Fetching dynamic data...</td></tr>`;
+      setTimeout(() => renderTable(mockData), 600);
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = mockData.filter(item => item.name.toLowerCase().includes(term));
+      renderTable(filtered);
+    });
+
+    renderTable(mockData);
+  </script>
+</body>
+</html>
