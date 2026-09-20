@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 4 - Data Structures Suite</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 40px 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { color: #38bdf8; margin-bottom: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-top: 24px; }
+    .ds-card { background: #1e293b; border: 1px solid #334155; padding: 24px; border-radius: 12px; }
+    .controls { display: flex; gap: 8px; margin: 16px 0; }
+    input { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; outline: none; }
+    button { padding: 10px 16px; background: #0284c7; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .display-box { min-height: 120px; border: 2px dashed #334155; border-radius: 8px; padding: 12px; display: flex; gap: 8px; align-items: center; overflow-x: auto; }
+    .node { background: #38bdf8; color: #0f172a; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Level 4: Data Structures & Algorithms Visualizer</h1>
+    <p style="color: #94a3b8;">Interactive implementations of Linear Data Structures in JavaScript</p>
+
+    <div class="grid">
+      <!-- Queue Visualizer -->
+      <div class="ds-card">
+        <h3>Queue Implementation (FIFO)</h3>
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 4px;">First In, First Out logic</p>
+        <div class="controls">
+          <input type="text" id="queueVal" placeholder="Value...">
+          <button id="enqueueBtn">Enqueue()</button>
+          <button id="dequeueBtn" style="background:#ef4444">Dequeue()</button>
+        </div>
+        <div class="display-box" id="queueDisplay"></div>
+      </div>
+
+      <!-- Binary Search Visualizer -->
+      <div class="ds-card">
+        <h3>Binary Search (O(log n))</h3>
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Search target in sorted array: [10, 20, 30, 40, 50, 60, 70, 80]</p>
+        <div class="controls">
+          <input type="number" id="searchTarget" placeholder="Target number...">
+          <button id="searchBtn">Search Target</button>
+        </div>
+        <div id="searchResult" style="margin-top: 12px; font-weight: 600; color: #4ade80;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Queue Implementation
+    const queue = ["Node 1", "Node 2"];
+    const queueDisplay = document.getElementById('queueDisplay');
+
+    function renderQueue() {
+      queueDisplay.innerHTML = '';
+      queue.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'node';
+        div.innerText = item;
+        queueDisplay.appendChild(div);
+      });
+    }
+
+    document.getElementById('enqueueBtn').addEventListener('click', () => {
+      const val = document.getElementById('queueVal').value;
+      if (val) {
+        queue.push(val);
+        document.getElementById('queueVal').value = '';
+        renderQueue();
+      }
+    });
+
+    document.getElementById('dequeueBtn').addEventListener('click', () => {
+      queue.shift();
+      renderQueue();
+    });
+
+    // Binary Search Implementation
+    const sortedArr = [10, 20, 30, 40, 50, 60, 70, 80];
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const target = parseInt(document.getElementById('searchTarget').value);
+      let left = 0, right = sortedArr.length - 1;
+      let foundIndex = -1;
+
+      while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (sortedArr[mid] === target) {
+          foundIndex = mid;
+          break;
+        }
+        if (sortedArr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+      }
+
+      const resDiv = document.getElementById('searchResult');
+      if (foundIndex !== -1) {
+        resDiv.style.color = '#4ade80';
+        resDiv.innerText = `Found target ${target} at Index [${foundIndex}] using Binary Search!`;
+      } else {
+        resDiv.style.color = '#ef4444';
+        resDiv.innerText = `Target ${target} not found in array.`;
+      }
+    });
+
+    renderQueue();
+  </script>
+</body>
+</html>
